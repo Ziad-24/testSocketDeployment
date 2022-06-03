@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- cdn is used to connect the socket to the ui -->
+    <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+    <title>Sockets chat</title>
+</head>
+<body>
+    <input type="text" class="message" id="message">
+    <button id="btn" onclick="sendMessage()">Send Message</button>
+    <h1></h1>
+    
+    <script>
+        const socket = io('http://localhost:3001')
+        // in the front end i connected the socket and then i created an event called "message" as the backend and when this event happens i do smth
+
+        socket.on('connection')
+        // recieve the event from the backend socket server
+        socket.on('message' , (data)=>{
+            document.querySelector('h1').innerHTML += data + "<br>"
+        })
+        // send the event to the backend server
+        const sendMessage = () => {
+            socket.emit('message' , document.getElementById('message').value)
+        }
+    </script>
+</body>
+</html>
