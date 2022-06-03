@@ -14,8 +14,10 @@ app.set('view engine' , 'ejs')
 const connection = mongoose.connection
 const dbURI = process.env.DATABASE_URL
 const PORT = process.env.PORT || 3001
-
-app.get('/home' , (req,res)=>{
+app.get('/',(req,res)=>{
+    res.redirect('/messageroom')
+})
+app.get('/messageroom' , (req,res)=>{
     res.render('index')
 })
 app.get('/api/testget' , async(req,res)=>{
