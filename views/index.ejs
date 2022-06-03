@@ -22,6 +22,7 @@
         const socket = io()
         // in the front end i connected the socket and then i created an event called "message" as the backend and when this event happens i do smth
         let messageArea = document.getElementById('messageArea')
+        let text = document.getElementById('message')
         socket.on('connection')
         // recieve the event from the backend socket server
         socket.on('message' , (data)=>{
@@ -29,11 +30,12 @@
         })
         // send the event to the backend server
         const sendMessage = () => {
-            socket.emit('message' , document.getElementById('message').value)
-            messageArea.innerHTML += '<h4 style="background-color: blue ; font-size: 25px;">' + document.getElementById('message').value + "</h4>"
-
-            
-            // document.getElementById('message').value + "<br>"
+            if(text.value != "")
+            {
+                socket.emit('message' , text.value)
+                messageArea.innerHTML += '<h4 style="background-color: blue ; font-size: 25px;">' +text.value + "</h4>"
+                text.innerHTML = ""
+            }            
         }
     </script>
 </body>
