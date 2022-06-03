@@ -11,6 +11,7 @@ const io = require('socket.io')(server)
 app.set('view engine' , 'ejs')
 // Database
 // project 0 cluster
+const connection = mongoose.connection
 const dbURI = process.env.DATABASE_URL
 const PORT = process.env.PORT || 3001
 
@@ -18,13 +19,12 @@ app.get('/home' , (req,res)=>{
     res.render('index')
 })
 app.get('/api/testget' , async(req,res)=>{
-    const data = await connection.collection("locations").find()
-    res.json(data)
+    const phoneUpdated = await connection.collection("phones").findOne({IMEI : "123123123123123"})
+    res.json(phoneUpdated)
 })
 
 mongoose.connect(dbURI , {useNewUrlParser: true, useUnifiedTopology: true})
 
-const connection = mongoose.connection
 connection.once('open', ()=>{
     const phonesChangeStream = connection.collection("phones").watch()
 
