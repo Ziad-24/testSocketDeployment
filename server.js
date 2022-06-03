@@ -6,38 +6,36 @@ const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 // init socket server
-const server = require('http').createServer(app)
+const server = require('http').Server(app)
 const io = require('socket.io')(server)
 app.set('view engine' , 'ejs')
 // Database
 // project 0 cluster
 const dbURI = process.env.DATABASE_URL
-
+const PORT = process.env.PORT || 3001
 
 app.get('/home' , (req,res)=>{
     res.render('index')
 })
-app.get('/api/testget' , (req,res)=>{
-    
+app.get('/api/testget' , async(req,res)=>{
+    const data = await connection.collection("locations").find()
+    res.json(data)
 })
 
 mongoose.connect(dbURI , {useNewUrlParser: true, useUnifiedTopology: true})
 
 const connection = mongoose.connection
 connection.once('open', ()=>{
-    const locationsChangeStream = connection.collection("locations").watch()
+    const phonesChangeStream = connection.collection("phones").watch()
 
-    locationsChangeStream.on('change', (change)=>{
+    phonesChangeStream.on('change', async (change)=>{
         switch(change.operationType) 
         {
-            case "delete": 
-                console.log(change.documentKey._id + " is deleted")
-                break
             case "update": 
                 console.log(change.documentKey._id +" is updated")
-                break
-            case "insert":
-                console.log("a new document inserted")
+                io.emit('message' , change.documentKey._id + " has updated")
+                const phoneUpdated = await connection.collection("phones").findOne({_id : change.documentKey._id})
+                io.emit('message' , JSON.stringify(phoneUpdated)) 
                 break
         }
     })
@@ -52,4 +50,4 @@ io.on('connection' , (socket) => {
     })
 })
 
-server.listen(3001, ()=> { console.log('server running..')})
+server.listen(PORT, ()=> { console.log('server running..')})
