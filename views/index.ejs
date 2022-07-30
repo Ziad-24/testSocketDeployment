@@ -6,37 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- cdn is used to connect the socket to the ui -->
     <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+    <link rel="stylesheet" href="/css/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Sockets chat</title>
-</head>
-<body>
-    <input type="text" class="message" id="message">
-    <button id="btn" onclick="sendMessage()">Send Message</button>
-    <div id="messageArea">
-
-    </div>
-    <h1 style="background-color: blue;"></h1>
-    <h2 style="background-color: red;"></h2>
     
+</head>
+<body class="container ">
+    <h1 class="text-center mt-3">Welcome to Ziad's messanger</h1>
+    <div class="container">
+        <div id="messageArea">
+    
+        </div>
+        <div class="justify-content-center align-items-center d-flex fixed-bottom mb-2 form-group">
+            <input type="text" class="message form-control w-25 m-2" id="message" placeholder="Message">
+            <button id="btn" onclick="sendMessage()"  class="btn btn-primary w-10">Send Message</button>
+        </div>
+    </div>
     <script>
         // 'http://localhost:3001'
         const socket = io()
         // in the front end i connected the socket and then i created an event called "message" as the backend and when this event happens i do smth
         let messageArea = document.getElementById('messageArea')
         let text = document.getElementById('message')
+        
         socket.on('connection')
         // recieve the event from the backend socket server
         socket.on('message' , (data)=>{
-            messageArea.innerHTML += '<h4 style="background-color: red ; font-size: 25px;">' + data + "</h4>"
+            messageArea.innerHTML += '<h4  class="alert alert-primary">' + data + "</h4>"
         })
         // send the event to the backend server
         const sendMessage = () => {
             if(text.value != "")
             {
                 socket.emit('message' , text.value)
-                messageArea.innerHTML += '<h4 style="background-color: blue ; font-size: 25px;">' +text.value + "</h4>"
-                text.innerHTML = ""
+                messageArea.innerHTML += '<h4  class="alert alert-secondary">' +text.value + "</h4>"
+                text.value = ""
             }            
         }
-    </script>
+        text.addEventListener('keypress',(e)=>{
+            if(e.key == 'Enter') 
+                sendMessage()
+        })
+
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

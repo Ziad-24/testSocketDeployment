@@ -14,6 +14,8 @@ app.set('view engine' , 'ejs')
 const connection = mongoose.connection
 const dbURI = process.env.DATABASE_URL
 const PORT = process.env.PORT || 3001
+app.use(express.static('public'))
+
 app.get('/',(req,res)=>{
     res.redirect('/messageroom')
 })
