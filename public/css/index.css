@@ -1,8 +1,15 @@
-/* .my-text{
-    background-color: blue;
-    font-size: 25px;
+.my-text{
+    background-color: black !important;
+    color: white !important;
 }
 .other-text{
-    background-color: red;
-    font-size: 25px;    
-} */
+    background-color: grey !important;
+    color: white !important;
+}
+body{
+    background: rgb(61,0,0);
+    background: linear-gradient(287deg, rgba(61,0,0,1) 19%, rgba(15,15,15,1) 95%);
+}
+.alert {
+    border: none !important;
+}
